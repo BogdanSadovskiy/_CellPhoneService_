@@ -1,0 +1,25 @@
+INSERT INTO roles(role) values
+('MANAGER'),
+('USER');
+
+INSERT INTO users (fname, sname, number_of_telephone, email, password, role_id)
+VALUES 
+    ('John', 'Doe', '123-456-7890', 'john@example.com', 'password123', 1), -- user role
+    ('Jane', 'Smith', '987-654-3210', 'jane@example.com', 'abc123', 1), -- user role
+    ('Manager','Bogdan', '555-555-5555', 'manager@example.com', 'managerpass', 2); -- manager role
+
+-- Populate devices table
+INSERT INTO devices (device_name, device_model, user_id, device_issue, date_of_start_of_service)
+VALUES 
+    ('Samsung', 'S20FE', 1, 'Cracked screen', '2024-05-15'),
+    ('Xiaomi','Redmi Note 2', 2, 'Battery replacement', '2024-05-10'),
+    ('Samsung', 'A34', 1, 'Software issue', '2024-05-18'),
+    ('Nokia', '3100', 1, 'Keybord replacement','2024-05-10') ;
+
+-- Populate services table
+INSERT INTO services (device_id, price_for_service, is_service_done, is_service_paid)
+VALUES 
+    (1, 50.00, 1, 0), -- Service completed
+    (2, 100.00, 1, 1), -- Service completed
+    (3, 0.00, 0, 0),
+    (4, 75.00, 1, 1); -- Service pending

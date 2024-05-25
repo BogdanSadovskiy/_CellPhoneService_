@@ -1,0 +1,37 @@
+-- Table to store roles
+CREATE TABLE roles (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    role NVARCHAR(100)
+);
+
+-- Table to store user information
+CREATE TABLE users (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    fname NVARCHAR(100),
+    sname NVARCHAR(100),
+    number_of_telephone NVARCHAR(20),
+    email NVARCHAR(100),
+    password NVARCHAR(100), -- New field for password
+    role_id INT REFERENCES roles(id) -- New field for role_id
+);
+
+-- Table to store device information
+CREATE TABLE devices (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    device_name NVARCHAR(100),
+    device_model NVARCHAR(100),
+    user_id INT REFERENCES users(id),
+    device_issue NVARCHAR(MAX),
+    date_of_start_of_service DATE
+);
+
+-- Table to store service information
+CREATE TABLE services (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    device_id INT REFERENCES devices(id),
+    price_for_service DECIMAL(10, 2),
+    is_service_done BIT,
+    is_service_paid BIT
+);
+
+
