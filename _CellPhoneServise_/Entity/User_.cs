@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace _CellPhoneService_.Entity
 {
-    public class UserTable
+    public class User_
     {
-        public UserTable() { }
-        public UserTable(int id, string firstName, string lastName, string phoneNumber,
+        
+        public User_(int id, string firstName, string lastName, string phoneNumber,
             string email, string password, int roleId)
         {
             this.Id = id;
