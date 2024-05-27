@@ -12,14 +12,15 @@ namespace _CellPhoneService_.Controller
             return userService.getAllUsers();
         }
 
-        public User_ loginUser(string email, string password) 
+        public Instance<User_> loginUser(string email, string password) 
         {
-            return 
+            return userService.signInUser(email, password); 
         }
-        //    public int createNewAccount(string name, string email, string password)
-        //    {
-        //        return serviceAccount.createNewAccount(name, email, password);
-        //    }
+
+        public string createNewAccount(string email, string password)
+        {
+            return serviceAccount.createNewAccount( email, password);
+        }
         //    public User getAccountById(int id)
         //    {
         //        return serviceAccount.getAccountById(id);

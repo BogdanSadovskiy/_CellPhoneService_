@@ -16,5 +16,10 @@ namespace _CellPhoneService_.Controller
             Message = message;
             this.obj = obj;
         }
+        public Instance()
+        {
+            Message = null;
+   
+        }
     }
 }

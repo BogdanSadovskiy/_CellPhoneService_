@@ -66,8 +66,7 @@
         private void SignIn_Click(object? sender, EventArgs e)
         {
             SignUp.Visible = false;
-            SignIn.Location = SignInEndLocation;
-            signInProcess = new SignInProcess(myForm, backButton);
+            signInProcess = new SignInProcess(myForm, backButton );
         }
 
         public void startFirstPage()

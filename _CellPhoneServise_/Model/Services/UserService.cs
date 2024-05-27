@@ -1,4 +1,5 @@
-﻿using _CellPhoneService_.Entity;
+﻿using _CellPhoneService_.Controller;
+using _CellPhoneService_.Entity;
 using _CellPhoneService_.Model.Repository;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -9,6 +10,9 @@ namespace _CellPhoneService_.Model.Services
     {
         string connectionString = ConfigurationManager.ConnectionStrings["db_connectionString"].ConnectionString;
         UserRepository repository = new UserRepository();
+        string message;
+        string success = "Success";
+        string internalErrorMessage = "Internal database ERROR";
 
         public List<User_> getAllUsers()
         {
@@ -29,9 +33,11 @@ namespace _CellPhoneService_.Model.Services
             return users;
         }
 
-        public User_ signInUser(string email, string password)
+        public Instance<User_> signInUser(string email, string password)
         {
+            Instance<User_> userInstance = new Instance<User_>();
             User_ user = null;
+ 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 try
@@ -41,15 +47,24 @@ namespace _CellPhoneService_.Model.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    userInstance.Message =   internalErrorMessage  ;
+                    return userInstance;
                 }
 
             }
-            if(user != null)
+            if (user != null)
             {
-                if (user.Password == password) return user; 
+                if (user.Password == password)
+                {
+                    userInstance.obj = user;
+                    userInstance.Message = success;
+                }
             }
-            return  null;
+            else
+            {
+                userInstance.Message = "Login or Password are uncorrect";
+            }
+            return  userInstance;
 
         }
         //public int createNewAccount(string name, string  email, string password)
