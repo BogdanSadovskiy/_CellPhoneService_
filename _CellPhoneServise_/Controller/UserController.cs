@@ -6,7 +6,7 @@ namespace _CellPhoneService_.Controller
     public class UserController
     {
         private UserService userService = new UserService();
-        public List<User_> getAllUsers()
+        public Instance< List<User_>> getAllUsers()
         {
 
             return userService.getAllUsers();
@@ -17,18 +17,26 @@ namespace _CellPhoneService_.Controller
             return userService.signInUser(email, password); 
         }
 
-        public string createNewAccount(string email, string password)
+        public Messages createNewAccount(string email, string password)
         {
-            return serviceAccount.createNewAccount( email, password);
+            return userService.createNewAccount( email, password);
         }
+
+        public Messages updateUserName(int id, string newName)
+        {
+            return userService.updateUserName(id, newName);
+        }
+
+        public Messages updateUserPhone(int id, string newPhone)
+        {
+            return userService.updateUserPhone(id, newPhone);
+        }
+
         //    public User getAccountById(int id)
         //    {
         //        return serviceAccount.getAccountById(id);
         //    }
-        //    public void updateAccountName(int id, string newName)
-        //    {
-        //        serviceAccount.updateAccountName(id, newName);
-        //    }
+
 
         //    public void deleteAccount(int id)
         //    {

@@ -55,19 +55,18 @@ namespace _CellPhoneService_.Model.Repository
             }
             return user;
         }
-        //public void createNewAccount(SqlConnection connection, string name, string email, string password)
-        //{
-        //    string query = $"INSERT INTO accounts  output inserted.id  values ('@name, @email, @password) ;";
-
-        //    using (SqlCommand cmd = new SqlCommand(query, connection))
-        //    {
-        //        cmd.Parameters.Add("@name", System.Data.SqlDbType.NVarChar).Value = name;
-        //        cmd.Parameters.Add("@email", System.Data.SqlDbType.NVarChar).Value = email;
-        //        cmd.Parameters.Add("@password", System.Data.SqlDbType.NVarChar).Value = password;
-        //        int id = (int)cmd.ExecuteScalar();
-        //        Console.WriteLine("you created id - " + id);
-        //    }
-        //}
+        public int createNewAccount(SqlConnection connection,string email, string password)
+        {
+            string query = $"INSERT INTO accounts  output inserted.id  values ('@name, @email, @password) ;";
+            int id = 0;
+            using (SqlCommand cmd = new SqlCommand(query, connection))
+            {
+                cmd.Parameters.Add("@email", System.Data.SqlDbType.NVarChar).Value = email;
+                cmd.Parameters.Add("@password", System.Data.SqlDbType.NVarChar).Value = password;
+                id = (int)cmd.ExecuteScalar();
+            }
+            return 0;
+        }
 
         //public User getAccountById(SqlConnection connection, int id)
         //{
@@ -90,17 +89,38 @@ namespace _CellPhoneService_.Model.Repository
         //    return account;
         //}
 
-        //public void updateAccountName(SqlConnection connection, int id, string newName)
-        //{
-        //    string query = "UPDATE  accounts SET name = @newName  WHERE id = " + id.ToString();
+        public void updateUserName(SqlConnection connection, int id, string newName)
+        {
+            string query = "UPDATE  users SET name = @newName  WHERE id = " + id.ToString();
 
-        //    using (SqlCommand cmd = new SqlCommand(query, connection))
-        //    {
-        //        cmd.Parameters.Add("@newName", System.Data.SqlDbType.NVarChar).Value = newName;
-        //        cmd.ExecuteNonQuery();
-        //    }
-        //}
+            using (SqlCommand cmd = new SqlCommand(query, connection))
+            {
+                cmd.Parameters.Add("@newName", System.Data.SqlDbType.NVarChar).Value = newName;
+                cmd.ExecuteNonQuery();
+            }
+        }
 
+        public void updateUserPhone(SqlConnection connection, int id, string newPhone)
+        {
+            string query = "UPDATE  users SET number_of_telephone  = @newPhone  WHERE id = " + id.ToString();
+
+            using (SqlCommand cmd = new SqlCommand(query, connection))
+            {
+                cmd.Parameters.Add("@newPhone", System.Data.SqlDbType.NVarChar).Value = newPhone;
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void updateUserPassword(SqlConnection connection, int id, string newPassword)
+        {
+            string query = "UPDATE  users SET password  = @newPassword  WHERE id = " + id.ToString();
+
+            using (SqlCommand cmd = new SqlCommand(query, connection))
+            {
+                cmd.Parameters.Add("@newPassword", System.Data.SqlDbType.NVarChar).Value = newPassword;
+                cmd.ExecuteNonQuery();
+            }
+        }
         //public void deleteAccount(SqlConnection connection,int id)
         //{
         //    string query = "DELETE FROM accounts WHERE ID = @id";

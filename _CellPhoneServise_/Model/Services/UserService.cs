@@ -10,81 +10,89 @@ namespace _CellPhoneService_.Model.Services
     {
         string connectionString = ConfigurationManager.ConnectionStrings["db_connectionString"].ConnectionString;
         UserRepository repository = new UserRepository();
-        string message;
         string success = "Success";
         string internalErrorMessage = "Internal database ERROR";
 
-        public List<User_> getAllUsers()
+        public Instance< List<User_>> getAllUsers()
         {
-            List<User_>? users = null;
+            Instance<List<User_>>? users = new Instance<List<User_>>();
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 try
                 {
                     connection.Open();
-                    users = repository.getAllUsers(connection);
+                    users.obj = repository.getAllUsers(connection);
                 }
 
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    users.setMessageStr( internalErrorMessage);
+                    users.setMessageError(Errors.SystemError);
                 }
             }
             return users;
         }
-
-        public Instance<User_> signInUser(string email, string password)
+        public Instance<User_> getUserByEmail(string email)
         {
             Instance<User_> userInstance = new Instance<User_>();
-            User_ user = null;
- 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 try
                 {
                     connection.Open();
-                    user = repository.getUserByEmail(email,connection);
+                    userInstance.obj = repository.getUserByEmail(email, connection);
                 }
                 catch (Exception ex)
                 {
-                    userInstance.Message =   internalErrorMessage  ;
+                    userInstance.setMessageStr (internalErrorMessage);
+                    userInstance.setMessageError( Errors.SystemError);
                     return userInstance;
                 }
-
-            }
-            if (user != null)
-            {
-                if (user.Password == password)
+                if (userInstance.obj == null)
                 {
-                    userInstance.obj = user;
-                    userInstance.Message = success;
+                    userInstance.setMessageStr ( "Can not find user");
                 }
+                return userInstance;
             }
-            else
-            {
-                userInstance.Message = "Login or Password are uncorrect";
-            }
-            return  userInstance;
+
 
         }
-        //public int createNewAccount(string name, string  email, string password)
-        //{
-        //    int id = 0;
-        //    using (SqlConnection connection = new SqlConnection(connectionString))
-        //    {
-        //        try
-        //        {
-        //            connection.Open();
-        //            repository.createNewAccount(connection, name, email, password);
-        //        }
+        public Instance<User_> signInUser(string email, string password)
+        {
+            Instance<User_> userInstance = getUserByEmail(email);
 
-        //        catch (Exception ex)
-        //        {
-        //            Console.WriteLine(ex.Message);
-        //        }
-        //    }
-        //    return id;
-        //}
+            if (userInstance.obj == null)
+            {
+                userInstance.setMessageError( Errors.ClientError);
+                userInstance.setMessageStr( "Login or Password are uncorrect");
+            }
+            if (userInstance.obj.Password == password)
+                userInstance.setMessageStr(success);
+
+            return userInstance;
+        }
+
+        public Messages createNewAccount(string email, string password)
+        {
+            int id;
+            if (getUserByEmail(email).obj != null) 
+                return new Messages("Login already exists", Errors.ClientError);
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    id = repository.createNewAccount(connection, email, password);
+                }
+
+                catch (Exception ex)
+                {
+                    return new Messages( ex.Message, Errors.SystemError);
+                }
+            }
+            return new Messages( $"Successfuly created account {id}");
+        }
         //public User getAccountById(int id)
         //{
         //    User account = null;
@@ -103,58 +111,92 @@ namespace _CellPhoneService_.Model.Services
         //        return account;
         //    }
         //}
+        public Messages updateUserPassword (int id, string newPassword)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    repository.updateUserName(connection, id, newPassword);
+                }
+                catch (Exception ex)
+                {
+                    return new Messages(ex.Message, Errors.SystemError);
+                }
+            }
+            return new Messages();
+        }
 
-        //public void updateAccountName(int id, string newName)
-        //{
-        //    using (SqlConnection connection = new SqlConnection(connectionString))
-        //    {
-        //        try
-        //        {
-        //            connection.Open();
-        //            repository.updateAccountName(connection,id, newName);
-        //        }
-        //        catch(Exception ex)
-        //        {
-        //            Console.WriteLine("\n" + ex.Message + "\n");
-        //        }
-        //    }
+        public Messages updateUserName(int id, string newName)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    repository.updateUserName(connection, id, newName);
+                }
+                catch (Exception ex)
+                {
+                    return new Messages(ex.Message,Errors.SystemError);
+                }
+            }
+            return new Messages();
+
+        }
+        public Messages updateUserPhone(int id, string newPhone)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    repository.updateUserPhone(connection, id, newPhone);
+                }
+                catch (Exception ex)
+                {
+                    return new Messages(ex.Message, Errors.SystemError);
+                }
+            }
+            return new Messages();
+        }
+
+        
 
 
+            //public void deleteAccount(int id)
+            //{
+            //    using (SqlConnection connection = new SqlConnection(connectionString))
+            //    {
+            //        try
+            //        {
+            //            connection.Open();
+            //            repository.deleteAccount(connection,id);
+            //        }
+            //        catch(Exception ex)
+            //        {
+            //            Console.WriteLine(ex.Message);
+            //        }
+            //    }
+            //}
+            //public User SighIn(string login, string password)
+            //{
+            //    User account = null;
+            //    using(SqlConnection connection = new SqlConnection(connectionString))
+            //    {
+            //        try
+            //        {
+            //            connection.Open();
+            //           account = repository.SighIn(connection, login, password);
+            //        }
+            //        catch(Exception ex)
+            //        {
+            //            Console.WriteLine(ex.Message);
+            //        }
 
-        //}
-
-        //public void deleteAccount(int id)
-        //{
-        //    using (SqlConnection connection = new SqlConnection(connectionString))
-        //    {
-        //        try
-        //        {
-        //            connection.Open();
-        //            repository.deleteAccount(connection,id);
-        //        }
-        //        catch(Exception ex)
-        //        {
-        //            Console.WriteLine(ex.Message);
-        //        }
-        //    }
-        //}
-        //public User SighIn(string login, string password)
-        //{
-        //    User account = null;
-        //    using(SqlConnection connection = new SqlConnection(connectionString))
-        //    {
-        //        try
-        //        {
-        //            connection.Open();
-        //           account = repository.SighIn(connection, login, password);
-        //        }
-        //        catch(Exception ex)
-        //        {
-        //            Console.WriteLine(ex.Message);
-        //        }
-
-        //    }
-        //    return account;
-        //}
-    }
+            //    }
+            //    return account;
+            //}
+        }
 }
