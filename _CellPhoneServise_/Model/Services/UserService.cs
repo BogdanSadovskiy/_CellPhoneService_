@@ -72,7 +72,7 @@ namespace _CellPhoneService_.Model.Services
             return userInstance;
         }
 
-        public Messages createNewAccount(string email, string password)
+        public Messages createNewAccount(string email, string password, int roleId)
         {
             int id;
             if (getUserByEmail(email).obj != null) 
@@ -83,7 +83,7 @@ namespace _CellPhoneService_.Model.Services
                 try
                 {
                     connection.Open();
-                    id = repository.createNewAccount(connection, email, password);
+                    id = repository.createNewAccount(connection, email, password, roleId);
                 }
 
                 catch (Exception ex)
@@ -118,7 +118,7 @@ namespace _CellPhoneService_.Model.Services
                 try
                 {
                     connection.Open();
-                    repository.updateUserName(connection, id, newPassword);
+                    repository.updateUserPassword(connection, id, newPassword);
                 }
                 catch (Exception ex)
                 {
@@ -128,14 +128,14 @@ namespace _CellPhoneService_.Model.Services
             return new Messages();
         }
 
-        public Messages updateUserName(int id, string newName)
+        public Messages updateUserFirstName(int id, string newName)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 try
                 {
                     connection.Open();
-                    repository.updateUserName(connection, id, newName);
+                    repository.updateUserFirstName(connection, id, newName);
                 }
                 catch (Exception ex)
                 {
@@ -145,6 +145,24 @@ namespace _CellPhoneService_.Model.Services
             return new Messages();
 
         }
+
+        public Messages updateUserLastName(int id, string newName)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    repository.updateUserLastName(connection, id, newName);
+                }
+                catch (Exception ex)
+                {
+                    return new Messages(ex.Message, Errors.SystemError);
+                }
+            }
+            return new Messages();
+        }
+
         public Messages updateUserPhone(int id, string newPhone)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))

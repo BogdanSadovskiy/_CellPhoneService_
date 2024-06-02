@@ -55,18 +55,21 @@ namespace _CellPhoneService_.Model.Repository
             }
             return user;
         }
-        public int createNewAccount(SqlConnection connection,string email, string password)
+        public int createNewAccount(SqlConnection connection, string email, string password, int roleId)
         {
-            string query = $"INSERT INTO accounts  output inserted.id  values ('@name, @email, @password) ;";
+            string query = "INSERT INTO accounts (email, password, role_id) OUTPUT INSERTED.id VALUES (@Email, @Password, @RoleId);";
             int id = 0;
             using (SqlCommand cmd = new SqlCommand(query, connection))
             {
-                cmd.Parameters.Add("@email", System.Data.SqlDbType.NVarChar).Value = email;
-                cmd.Parameters.Add("@password", System.Data.SqlDbType.NVarChar).Value = password;
+                cmd.Parameters.Add("@Email", System.Data.SqlDbType.NVarChar).Value = email;
+                cmd.Parameters.Add("@Password", System.Data.SqlDbType.NVarChar).Value = password;
+                cmd.Parameters.Add("@RoleId", System.Data.SqlDbType.Int).Value = roleId;
+
                 id = (int)cmd.ExecuteScalar();
             }
-            return 0;
+            return id;
         }
+
 
         //public User getAccountById(SqlConnection connection, int id)
         //{
@@ -89,35 +92,52 @@ namespace _CellPhoneService_.Model.Repository
         //    return account;
         //}
 
-        public void updateUserName(SqlConnection connection, int id, string newName)
+        public void updateUserFirstName(SqlConnection connection, int id, string newName)
         {
-            string query = "UPDATE  users SET name = @newName  WHERE id = " + id.ToString();
+            string query = "UPDATE users SET fname = @fname WHERE id = @id";
 
             using (SqlCommand cmd = new SqlCommand(query, connection))
             {
-                cmd.Parameters.Add("@newName", System.Data.SqlDbType.NVarChar).Value = newName;
+                cmd.Parameters.Add("@fname", System.Data.SqlDbType.NVarChar).Value = newName;
+                cmd.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = id;
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void updateUserLastName(SqlConnection connection, int id, string newName)
+        {
+            string query = "UPDATE users SET sname = @sname WHERE id = @id;";
+
+            using (SqlCommand cmd = new SqlCommand(query, connection))
+            {
+                cmd.Parameters.Add("@sname", System.Data.SqlDbType.NVarChar).Value = newName;
+                cmd.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = id;
+
                 cmd.ExecuteNonQuery();
             }
         }
 
         public void updateUserPhone(SqlConnection connection, int id, string newPhone)
         {
-            string query = "UPDATE  users SET number_of_telephone  = @newPhone  WHERE id = " + id.ToString();
+            string query = "UPDATE  users SET number_of_telephone  = @newPhone  WHERE id = @id;";
 
             using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.Parameters.Add("@newPhone", System.Data.SqlDbType.NVarChar).Value = newPhone;
+                cmd.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = id;
                 cmd.ExecuteNonQuery();
             }
         }
 
         public void updateUserPassword(SqlConnection connection, int id, string newPassword)
         {
-            string query = "UPDATE  users SET password  = @newPassword  WHERE id = " + id.ToString();
+            string query = "UPDATE  users SET password  = @newPassword  WHERE id = @id";
 
             using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.Parameters.Add("@newPassword", System.Data.SqlDbType.NVarChar).Value = newPassword;
+                cmd.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = id;
                 cmd.ExecuteNonQuery();
             }
         }

@@ -17,14 +17,19 @@ namespace _CellPhoneService_.Controller
             return userService.signInUser(email, password); 
         }
 
-        public Messages createNewAccount(string email, string password)
+        public Messages createNewAccount(string email, string password, int roleId)
         {
-            return userService.createNewAccount( email, password);
+            return userService.createNewAccount( email, password, roleId);
         }
 
-        public Messages updateUserName(int id, string newName)
+        public Messages updateUserFirstName(int id, string newName)
         {
-            return userService.updateUserName(id, newName);
+            return userService.updateUserFirstName(id, newName);
+        }
+
+        public Messages updateUserLastName(int id, string newName)
+        {
+            return userService.updateUserLastName(id, newName);
         }
 
         public Messages updateUserPhone(int id, string newPhone)

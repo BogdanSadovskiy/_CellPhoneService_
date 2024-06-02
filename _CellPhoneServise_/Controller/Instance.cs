@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace _CellPhoneService_.Controller
+﻿namespace _CellPhoneService_.Controller
 {
     public enum Errors
     {
