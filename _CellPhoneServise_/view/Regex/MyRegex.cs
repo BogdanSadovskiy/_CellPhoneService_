@@ -2,7 +2,7 @@
 
 namespace _CellPhoneService_.view.Regex
 {
-    public class ViewCheck
+    public class MyRegex
     {
         private static string emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 

@@ -1,37 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace _CellPhoneService_.view.Menu
+﻿namespace _CellPhoneService_.view.Menu
 {
-    public  class SignInProcess
+    public class SignInProcess
     {
         private Button SignIn;
         private Size buttonSize;
         private Point SignInLocation;
-        private  TextBox login;
-        private  TextBox password;
-        private  Form myForm;
+        private TextBox login;
+        private TextBox password;
+        private Form myForm;
         private Size textboxSize;
         private BackButton backButton;
+        Password passwordInstance;
         private void InitializeElements()
         {
             buttonSize = new Size(70, 20);
             textboxSize = new Size(200, 30);
 
-            SignInLocation = new Point(myForm.Width / 2 - buttonSize.Width / 2 + myForm.Height / 2  + myForm.Height / 4 + 20);
+            SignInLocation = new Point(myForm.Width / 2 - buttonSize.Width / 2 + myForm.Height / 2 + myForm.Height / 4 + 20);
 
             login = new TextBox();
-            login.Location = new Point(myForm.Width / 2 - textboxSize.Width/2, myForm.Height / 2 - 60);
+            login.Location = new Point(myForm.Width / 2 - textboxSize.Width / 2, myForm.Height / 2 - 60);
             login.Size = textboxSize;
             login.Visible = true;
 
             password = new TextBox();
-            password.Location = new Point(login.Location.X, login.Location.Y+50 );
+            password.Location = new Point(login.Location.X, login.Location.Y + 50);
             password.Size = textboxSize;
             password.Visible = true;
+
+            passwordInstance = new Password();
+            passwordInstance.initialize(myForm, password);
 
             SignIn = new Button();
             SignIn.Text = "Sign In";
@@ -45,6 +43,13 @@ namespace _CellPhoneService_.view.Menu
             myForm.Controls.Add(SignIn);
         }
 
+        public void deinitialize()
+        {
+            myForm.Controls.Remove(login);
+            myForm.Controls.Remove(password);
+            myForm.Controls.Remove(SignIn);
+        }
+
         private void isLoginOk(string login)
         {
 
@@ -52,7 +57,7 @@ namespace _CellPhoneService_.view.Menu
 
         private void SignIn_Click(object? sender, EventArgs e)
         {
-            
+
         }
 
         public SignInProcess(Form myForm, BackButton backButton)
@@ -61,7 +66,7 @@ namespace _CellPhoneService_.view.Menu
             this.backButton = backButton;
             backButton.status = BackStatus._SignInPage;
             backButton.Back.Visible = true;
- 
+
         }
         public void startSignIn()
         {
