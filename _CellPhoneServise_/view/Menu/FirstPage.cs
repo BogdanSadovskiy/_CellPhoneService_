@@ -6,11 +6,11 @@
         {
             this.myForm = myForm;
             InitializeElements();
-            startFirstPage();
+
         }
         public SignInProcess? signInProcess {  get; set; }
         
-        private BackButton? backButton;
+        private MenuExplorer? menuExplorer;
         private Button? SignIn;
         private Button? SignUp;
         private Form myForm;
@@ -21,7 +21,7 @@
         private Point SignUpEndLocation;
 
 
-        private void InitializeElements()
+        public void InitializeElements()
         {
             buttonSize = new Size(70, 20);
 
@@ -34,7 +34,8 @@
             Button back = new Button();
             back.Location = new Point(myForm.Size.Width - 50, 50);
 
-            backButton = new BackButton(back, BackStatus._FirstPage, this);
+            menuExplorer = new MenuExplorer(back, BackStatus._FirstPage, this);
+            menuExplorer.BackButton.Visible = false;
 
             SignIn = new Button();
             SignIn.Text = "Sign In";
@@ -42,6 +43,7 @@
             SignIn.Location = SignInStartLocation;
             SignIn.Size = buttonSize;
             SignIn.Click += SignIn_Click;
+            SignIn.Visible = true;
 
             SignUp = new Button();
             SignUp.Text = "Sign Up";
@@ -49,6 +51,7 @@
             SignUp.Location = SignUpStartLocation;
             SignUp.Size = buttonSize;
             SignUp.Click += SignUp_Click;
+            SignUp.Visible = true;
 
 
             myForm.Controls.Add(SignIn);
@@ -62,20 +65,18 @@
             throw new NotImplementedException();
         }
 
-
+        private void deinitializeElements()
+        {
+            myForm.Controls.Remove(SignUp);
+            myForm.Controls.Remove(SignIn);
+        }
         private void SignIn_Click(object? sender, EventArgs e)
         {
-            SignUp.Visible = false;
-            signInProcess = new SignInProcess(myForm, backButton );
+            deinitializeElements();
+            signInProcess = new SignInProcess();
+            signInProcess.InitializeElements(myForm, menuExplorer);
         }
 
-        public void startFirstPage()
-        {
-            SignIn.Location = SignInStartLocation;
-            SignUp.Location = SignUpStartLocation;
-            SignIn.Visible = true;
-            SignUp.Visible = true;
-            backButton.Back.Visible = false;
-        }
+
     }
 }

@@ -13,19 +13,19 @@ namespace _CellPhoneService_.view.Menu
         _SignInPage, 
         _SignUpPage
     }
-    public class BackButton
+    public class MenuExplorer
     {
-        public Button Back {  get; set; }
+        public Button BackButton {  get; set; }
         public BackStatus status {  get; set; }
         private FirstPage page;
 
-        public BackButton(Button back, BackStatus status, FirstPage page)
+        public MenuExplorer(Button back, BackStatus status, FirstPage page)
         {
-            Back = back;
-            Back.Text = "Back";
-            Back.TextAlign = ContentAlignment.MiddleCenter;
-            Back.Size = new Size(20, 20);
-            Back.Click += Back_Click;
+            BackButton = back;
+            BackButton.Text = "Back";
+            BackButton.TextAlign = ContentAlignment.MiddleCenter;
+            BackButton.Size = new Size(20, 20);
+            BackButton.Click += Back_Click;
             this.status = status;
             this.page = page;
         }
