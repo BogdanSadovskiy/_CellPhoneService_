@@ -57,5 +57,13 @@
         {
             this.message.Error = error;
         }
+        public string getMessageStr()
+        {
+            return this.message.Message;
+        }
+        public Errors getError()
+        {
+            return (Errors)this.message.Error;
+        }
     }
 }

@@ -10,7 +10,7 @@ CREATE TABLE users (
     fname NVARCHAR(100),
     sname NVARCHAR(100),
     number_of_telephone NVARCHAR(20),
-    email NVARCHAR(100),
+    email NVARCHAR(100) unique,
     password NVARCHAR(100), -- New field for password
     role_id INT REFERENCES roles(id) -- New field for role_id
 );

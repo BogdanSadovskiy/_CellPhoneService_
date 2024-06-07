@@ -1,4 +1,6 @@
-﻿using _CellPhoneService_.view.Navigation;
+﻿using _CellPhoneService_.Controller;
+using _CellPhoneService_.Entity;
+using _CellPhoneService_.view.Navigation;
 using _CellPhoneService_.view.Service;
 
 namespace _CellPhoneService_.view.Menu
@@ -14,6 +16,11 @@ namespace _CellPhoneService_.view.Menu
         private Size textboxSize;
         Password passwordInstance;
         Login loginInstance;
+        UserController controller;
+        string initialLoginText;
+        string initialPasswordText;
+
+        Label label = new Label();
         public SignInProcess(Form myForm, Page priviesPage, NavigationManager navigationManager)
         {
             this.navigationManager = navigationManager;
@@ -22,6 +29,15 @@ namespace _CellPhoneService_.view.Menu
         }
         private void InitializeElements()
         {
+            label.AutoSize = true;
+            label.Location = new Point(300, 300);
+            label.Visible = false;
+            myForm.Controls.Add(label); 
+
+            controller = new UserController();
+            initialLoginText = "Input Email";
+            initialPasswordText = "Input Password";
+
             buttonSize = new Size(70, 20);
             textboxSize = new Size(200, 30);
 
@@ -37,10 +53,10 @@ namespace _CellPhoneService_.view.Menu
             password.Visible = true;
            
             loginInstance = new Login();
-            loginInstance.InitializeSignInLogin(myForm, login);
+            loginInstance.InitializeSignInLogin(myForm, login, initialLoginText);
 
             passwordInstance = new Password();
-            passwordInstance.initializeForSignIn(myForm, password);
+            passwordInstance.initializeForSignIn(myForm, password, initialPasswordText);
 
             SignInLocation = new Point(myForm.Width / 2 - buttonSize.Width / 2, password.Location.Y + 2 * password.Height + 40);
 
@@ -68,12 +84,29 @@ namespace _CellPhoneService_.view.Menu
 
         private void SignIn_Click(object? sender, EventArgs e)
         {
-
+            if (!isLoginOk(login.Text) || !isPasswordOk(password.Text)) { return; }
+            Instance<User_> user = controller.loginUser(login.Text, password.Text);
+            label.Visible = true;
+            if (user.obj == null) 
+            {
+                label.Text = user.getMessageStr();
+                return;
+            }
+            label.Text = user.obj.FirstName;
         }
 
         public override void InitializePage()
         {
             InitializeElements();
+        }
+        private bool isLoginOk(string login)
+        {
+            return login != "" && login != initialLoginText;
+        }
+
+        private bool isPasswordOk(string password)
+        {
+            return password != "" && password != initialPasswordText;
         }
     }
 }

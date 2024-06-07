@@ -11,9 +11,9 @@
         Label? passwordStrength;
         private bool isSignUp;
    
-        public void initializeForSignIn(Form myForm, TextBox password_)
+        public void initializeForSignIn(Form myForm, TextBox password_, string initialText)
         {
-            passwordInitialText = "Input Password";
+            passwordInitialText = initialText;
             password = password_;
             password.Text = passwordInitialText;
             password.Click += Password_Click;
@@ -36,9 +36,9 @@
 
        
 
-        public void initializeForSignUp(Form myForm, TextBox password, TextBox repeatedPassword)
+        public void initializeForSignUp(Form myForm, TextBox password, TextBox repeatedPassword, string initialText)
         {
-            initializeForSignIn(myForm, password);
+            initializeForSignIn(myForm, password, initialText);
             isSignUp = true;
             this.repeatedPassword = repeatedPassword;
             passwordStrength = new Label();

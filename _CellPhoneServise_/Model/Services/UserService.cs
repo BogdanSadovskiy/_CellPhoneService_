@@ -44,7 +44,8 @@ namespace _CellPhoneService_.Model.Services
                 }
                 catch (Exception ex)
                 {
-                    userInstance.setMessageStr (internalErrorMessage);
+                    //userInstance.setMessageStr (internalErrorMessage);
+                    userInstance.setMessageStr (ex.Message);
                     userInstance.setMessageError( Errors.SystemError);
                     return userInstance;
                 }
@@ -61,12 +62,12 @@ namespace _CellPhoneService_.Model.Services
         {
             Instance<User_> userInstance = getUserByEmail(email);
 
-            if (userInstance.obj == null)
+            if (userInstance.obj == null && userInstance.getError() == Errors.NoneErrors)
             {
-                userInstance.setMessageError( Errors.ClientError);
-                userInstance.setMessageStr( "Login or Password are uncorrect");
+                userInstance.setMessageError(Errors.ClientError);
+                userInstance.setMessageStr("Login or Password are uncorrect");
             }
-            if (userInstance.obj.Password == password)
+            else if (userInstance.obj.Password == password)
                 userInstance.setMessageStr(success);
 
             return userInstance;

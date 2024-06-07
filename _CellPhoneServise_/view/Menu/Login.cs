@@ -8,9 +8,9 @@ namespace _CellPhoneService_.view.Menu
         Label message;
         string initialText;
         bool isSingUp;
-        public void InitializeSignInLogin(Form form, TextBox login)
+        public void InitializeSignInLogin(Form form, TextBox login, string initialText)
         {
-            initialText = "Input Email";
+            this.initialText  = initialText;
             myForm = form;
             this.login = login;
             message = new Label();
@@ -24,9 +24,9 @@ namespace _CellPhoneService_.view.Menu
 
         }
 
-        public void InitializeSignUpLogin(Form form, TextBox login)
+        public void InitializeSignUpLogin(Form form, TextBox login, string initialText)
         {
-            InitializeSignInLogin(form, login);
+            InitializeSignInLogin(form, login, initialText);
             login.TextChanged += Login_TextChanged;
             isSingUp = true;
         }
@@ -65,7 +65,7 @@ namespace _CellPhoneService_.view.Menu
                 login.Text = "";
             openTextChanged();
         }
-
+       
         public void DeinitializeSignIn()
         {
             myForm.Controls.Remove(login);
