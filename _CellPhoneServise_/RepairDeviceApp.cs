@@ -1,5 +1,6 @@
 
 using _CellPhoneService_.view.Menu;
+using _CellPhoneService_.view.Navigation;
 namespace _CellPhoneServise_
 {
     public partial class RepairDeviceApp : Form
@@ -8,7 +9,9 @@ namespace _CellPhoneServise_
         public RepairDeviceApp()
         {
             InitializeComponent();
-            FirstPage start = new FirstPage(this);
+            Page start = new FirstPage(this);
+            NavigationManager navigation = new NavigationManager(start);
+            navigation.InitializeBackButton(this);
         }
     }
 }

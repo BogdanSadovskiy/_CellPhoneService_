@@ -1,8 +1,9 @@
-﻿using _CellPhoneService_.view.Service;
+﻿using _CellPhoneService_.view.Navigation;
+using _CellPhoneService_.view.Service;
 
 namespace _CellPhoneService_.view.Menu
 {
-    public class SignInProcess
+    public class SignInProcess : Page
     {
         private Button SignIn;
         private Size buttonSize;
@@ -11,39 +12,37 @@ namespace _CellPhoneService_.view.Menu
         private TextBox password;
         private Form myForm;
         private Size textboxSize;
-        private MenuExplorer backButton;
-
-        private string loginInitialText;
         Password passwordInstance;
-        public void InitializeElements(Form myForm, MenuExplorer backButton)
+        Login loginInstance;
+        public SignInProcess(Form myForm, Page priviesPage, NavigationManager navigationManager)
         {
- 
-            loginInitialText = "Input Login";
-
+            this.navigationManager = navigationManager;
+            this.priviesPage = priviesPage;
             this.myForm = myForm;
-            this.backButton = backButton;
-            backButton.status = BackStatus._SignInPage;
-            backButton.BackButton.Visible = true;
-
+        }
+        private void InitializeElements()
+        {
             buttonSize = new Size(70, 20);
             textboxSize = new Size(200, 30);
-
-            SignInLocation = new Point(myForm.Width / 2 - buttonSize.Width / 2 + myForm.Height / 2 + myForm.Height / 4 + 20);
 
             login = new TextBox();
             login.Location = new Point(myForm.Width / 2 - textboxSize.Width / 2, myForm.Height / 2 - 60);
             login.Size = textboxSize;
             login.Visible = true;
-            login.Text = loginInitialText;
+
 
             password = new TextBox();
             password.Location = new Point(login.Location.X, login.Location.Y + 50);
             password.Size = textboxSize;
             password.Visible = true;
            
+            loginInstance = new Login();
+            loginInstance.InitializeSignInLogin(myForm, login);
 
             passwordInstance = new Password();
             passwordInstance.initializeForSignIn(myForm, password);
+
+            SignInLocation = new Point(myForm.Width / 2 - buttonSize.Width / 2, password.Location.Y + 2 * password.Height + 40);
 
             SignIn = new Button();
             SignIn.Text = "Sign In";
@@ -57,17 +56,14 @@ namespace _CellPhoneService_.view.Menu
             myForm.Controls.Add(SignIn);
         }
 
-        public void deinitialize()
+
+        public override void DeinitializePage()
         {
+            loginInstance.DeinitializeSignIn();
             passwordInstance.deinitializeSignin();
             myForm.Controls.Remove(login);
             myForm.Controls.Remove(password);
             myForm.Controls.Remove(SignIn);
-        }
-
-        private bool isLoginOk(string login)
-        {
-            return ViewCheck.isLoginOk( login);
         }
 
         private void SignIn_Click(object? sender, EventArgs e)
@@ -75,6 +71,9 @@ namespace _CellPhoneService_.view.Menu
 
         }
 
-
+        public override void InitializePage()
+        {
+            InitializeElements();
+        }
     }
 }

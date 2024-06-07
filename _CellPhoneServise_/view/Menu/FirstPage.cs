@@ -1,16 +1,20 @@
-﻿namespace _CellPhoneService_.view.Menu
+﻿using _CellPhoneService_.view.Navigation;
+
+namespace _CellPhoneService_.view.Menu
 {
-    public class FirstPage
+    public class FirstPage : Page
     {
         public FirstPage(Form myForm)
         {
             this.myForm = myForm;
-            InitializeElements();
-
         }
-        public SignInProcess? signInProcess {  get; set; }
-        
-        private MenuExplorer? menuExplorer;
+
+        public override void DeinitializePage()
+        {
+            myForm.Controls.Remove(SignUp);
+            myForm.Controls.Remove(SignIn);
+        }
+
         private Button? SignIn;
         private Button? SignUp;
         private Form myForm;
@@ -23,6 +27,7 @@
 
         public void InitializeElements()
         {
+            this.priviesPage = null;
             buttonSize = new Size(70, 20);
 
             SignInStartLocation = new Point(myForm.Width / 2 - buttonSize.Width / 2, myForm.Height / 2 - 40);
@@ -31,11 +36,7 @@
             SignUpStartLocation = new Point(SignInStartLocation.X, SignInStartLocation.Y + 70);
             SignUpEndLocation = SignInEndLocation;
 
-            Button back = new Button();
-            back.Location = new Point(myForm.Size.Width - 50, 50);
 
-            menuExplorer = new MenuExplorer(back, BackStatus._FirstPage, this);
-            menuExplorer.BackButton.Visible = false;
 
             SignIn = new Button();
             SignIn.Text = "Sign In";
@@ -56,7 +57,6 @@
 
             myForm.Controls.Add(SignIn);
             myForm.Controls.Add(SignUp);
-            myForm.Controls.Add(back);
 
         }
 
@@ -65,18 +65,16 @@
             throw new NotImplementedException();
         }
 
-        private void deinitializeElements()
-        {
-            myForm.Controls.Remove(SignUp);
-            myForm.Controls.Remove(SignIn);
-        }
+
         private void SignIn_Click(object? sender, EventArgs e)
         {
-            deinitializeElements();
-            signInProcess = new SignInProcess();
-            signInProcess.InitializeElements(myForm, menuExplorer);
+            DeinitializePage();
+            this.navigationManager.InitializeNextPage(new SignInProcess(myForm, this, navigationManager));
         }
 
-
+        public override void InitializePage()
+        {
+            InitializeElements();
+        }
     }
 }

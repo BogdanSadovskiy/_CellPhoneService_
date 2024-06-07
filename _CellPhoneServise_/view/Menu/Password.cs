@@ -1,44 +1,59 @@
-﻿using _CellPhoneService_.view.Service;
-
-namespace _CellPhoneService_.view.Menu
+﻿namespace _CellPhoneService_.view.Menu
 {
     public class Password
     {
         TextBox? password;
         Form? myForm;
         Button? visability;
-        bool visabilityCheck;
         private string passwordInitialText;
 
         TextBox? repeatedPassword;
         Label? passwordStrength;
- 
+        private bool isSignUp;
    
-        public void initializeForSignIn(Form myForm, TextBox password)
+        public void initializeForSignIn(Form myForm, TextBox password_)
         {
             passwordInitialText = "Input Password";
-            this.myForm = myForm;
-            visabilityCheck = false;
-            visability = new Button();
-            visability.Location = new Point(password.Location.X + password.Width + 20,
-                password.Location.Y);
-            visability.Click += Visability_Click;
-            visability.Size = new Size(password.Size.Height, password.Size.Height);
-            visability.Visible = true;
-            this.myForm.Controls.Add(visability);
-
+            password = password_;
             password.Text = passwordInitialText;
             password.Click += Password_Click;
             password.Leave += Password_Leave;
-            password.TextChanged += Password_TextChanged;
+            
+            isSignUp = false;
+
+            this.myForm = myForm;
+            visability = new Button();
+            visability.Location = new Point(password.Location.X + password.Width + 20,
+                password.Location.Y);
+            visability.MouseDown += Visability_MouseDown;
+            visability.MouseUp += Visability_MouseUp;
+            visability.Size = new Size(password.Size.Height, password.Size.Height);
+            visability.Visible = true;
+
+            this.myForm.Controls.Add(visability);
+ 
         }
+
+       
 
         public void initializeForSignUp(Form myForm, TextBox password, TextBox repeatedPassword)
         {
             initializeForSignIn(myForm, password);
+            isSignUp = true;
             this.repeatedPassword = repeatedPassword;
             passwordStrength = new Label();
-            passwordStrength.Location = new Point(repeatedPassword.Location.X + repeatedPassword.)
+            passwordStrength.Location = new Point(this.password.Location.X, password.Location.Y + password.Height + 10);
+            password.TextChanged += Password_TextChanged;
+        }
+
+        private void closeTextChanged()
+        {
+            if (isSignUp) { password.TextChanged -= Password_TextChanged; }
+        }
+
+        private void openTextChanged()
+        {
+            if (isSignUp) { password.TextChanged += Password_TextChanged; }
         }
 
         private void Password_TextChanged(object? sender, EventArgs e)
@@ -48,19 +63,23 @@ namespace _CellPhoneService_.view.Menu
 
         private void Password_Leave(object? sender, EventArgs e)
         {
-            password.TextChanged -= Password_TextChanged;
+            closeTextChanged();
             if (password.Text == "")
+            {
+                password.UseSystemPasswordChar = false;
                 password.Text = passwordInitialText;
-            password.TextChanged += Password_TextChanged;
+            }
+            openTextChanged();
         }
 
 
         private void Password_Click(object? sender, EventArgs e)
         {
-            password.TextChanged -= Password_TextChanged;
+            closeTextChanged();
             if (password.Text == passwordInitialText)
                 password.Text = "";
-            password.TextChanged += Password_TextChanged;
+            password.UseSystemPasswordChar = true;
+            openTextChanged();
         }
 
 
@@ -69,12 +88,27 @@ namespace _CellPhoneService_.view.Menu
         {
             myForm.Controls.Remove(visability);
         }
-        private void Visability_Click(object? sender, EventArgs e)
+        private void Visability_MouseDown(object? sender, EventArgs e)
         {
-            password.UseSystemPasswordChar = !visabilityCheck;
-            visabilityCheck = !visabilityCheck;
+            if(password.Text == passwordInitialText)
+            {
+                password.UseSystemPasswordChar=false;
+                return;
+            }
+            password.UseSystemPasswordChar = false;
+
         }
 
+        private void Visability_MouseUp(object? sender, MouseEventArgs e)
+        {
+            if (password.Text == passwordInitialText)
+            {
+                password.UseSystemPasswordChar = false;
+                return;
+            }
+            password.UseSystemPasswordChar = true;
+
+        }
 
 
 
