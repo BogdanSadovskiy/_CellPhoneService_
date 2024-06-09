@@ -1,4 +1,7 @@
-﻿namespace _CellPhoneService_.view.Menu
+﻿using _CellPhoneService_.view.Regex;
+using _CellPhoneService_.view.Service;
+
+namespace _CellPhoneService_.view.Menu
 {
     public class Password
     {
@@ -9,7 +12,9 @@
 
         TextBox? repeatedPassword;
         Label? passwordStrength;
+        Label? repitedPasswordIndicator;
         private bool isSignUp;
+        string initialRepitedPassText;
    
         public void initializeForSignIn(Form myForm, TextBox password_, string initialText)
         {
@@ -39,11 +44,37 @@
         public void initializeForSignUp(Form myForm, TextBox password, TextBox repeatedPassword, string initialText)
         {
             initializeForSignIn(myForm, password, initialText);
+            //initialRepitedPassText = "Repeat password";
             isSignUp = true;
             this.repeatedPassword = repeatedPassword;
+            repeatedPassword.UseSystemPasswordChar = true;  
+            repeatedPassword.TextChanged += RepeatedPassword_TextChanged;
+
             passwordStrength = new Label();
-            passwordStrength.Location = new Point(this.password.Location.X, password.Location.Y + password.Height + 10);
+            passwordStrength.Size = password.Size;
+            passwordStrength.Location = new Point(this.password.Location.X, password.Location.Y + password.Height);
+            passwordStrength.Visible = false;
+
+            repitedPasswordIndicator = new Label();
+            repitedPasswordIndicator.Size = repeatedPassword.Size;
+            repitedPasswordIndicator.Location = new Point(this.repeatedPassword.Location.X, repeatedPassword.Height);
+            repitedPasswordIndicator.Visible = false;
+            
+
             password.TextChanged += Password_TextChanged;
+            myForm.Controls.Add(passwordStrength);  
+        }
+
+        private void RepeatedPassword_TextChanged(object? sender, EventArgs e)
+        {
+            repitedPasswordIndicator.Visible = true;
+            if (repeatedPassword.Text != password.Text) {
+                repitedPasswordIndicator.ForeColor = Colors.ErrorColor();
+                repitedPasswordIndicator.Text = "Not Correct";
+                return;
+            }
+            repitedPasswordIndicator.ForeColor = Color.Green;
+            repitedPasswordIndicator.Text = "Correct";
         }
 
         private void closeTextChanged()
@@ -58,7 +89,28 @@
 
         private void Password_TextChanged(object? sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            passwordStrength.Visible = true;
+            if (MyRegex.isPasswordStrong(password.Text))
+            {
+                passwordStrength.ForeColor = Color.Green;
+                passwordStrength.Text = "Strong";
+            }
+            else if (MyRegex.isPasswordMiddleStrength(password.Text))
+            {
+                passwordStrength.ForeColor = Color.Orange;
+                passwordStrength.Text = "Middle";
+            }
+            else if (MyRegex.isPasswordWeak(password.Text))
+            {
+                passwordStrength.ForeColor = Colors.ErrorColor();
+                passwordStrength.Text = "Weak";
+            }
+            else if(password.Text.Length < 4)
+            {
+                passwordStrength.ForeColor = Colors.ErrorColor();
+                passwordStrength.Text = "Not Less 4 symbols";
+            }
+
         }
 
         private void Password_Leave(object? sender, EventArgs e)
@@ -68,6 +120,8 @@
             {
                 password.UseSystemPasswordChar = false;
                 password.Text = passwordInitialText;
+                passwordStrength.Visible = false;
+                repitedPasswordIndicator.Visible = false;
             }
             openTextChanged();
         }

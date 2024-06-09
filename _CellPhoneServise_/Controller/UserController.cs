@@ -37,10 +37,10 @@ namespace _CellPhoneService_.Controller
             return userService.updateUserPhone(id, newPhone);
         }
 
-        //    public User getAccountById(int id)
-        //    {
-        //        return serviceAccount.getAccountById(id);
-        //    }
+        public User_ getUserById(int id)
+        {
+            return userService.getUserById(id);
+        }
 
 
         //    public void deleteAccount(int id)

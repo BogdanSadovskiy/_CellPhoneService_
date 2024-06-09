@@ -71,26 +71,29 @@ namespace _CellPhoneService_.Model.Repository
         }
 
 
-        //public User getAccountById(SqlConnection connection, int id)
-        //{
-        //    User account = null;
-        //    string query = "SELECT * FROM accounts WHERE id = " + id.ToString() + ";";
-        //    using (SqlCommand cmd = new SqlCommand(query, connection))
-        //    {
-        //        using (SqlDataReader reader = cmd.ExecuteReader())
-        //        {
-        //            while (reader.Read())
-        //            {
-        //                int recivedId = Convert.ToInt32(reader["id"]);
-        //                string name = Convert.ToString(reader["name"]);
-        //                string email = Convert.ToString(reader["email"]);
-        //                string password = Convert.ToString(reader["password"]);
-        //                account = new User(recivedId, name, email, password);
-        //            }
-        //        }
-        //    }
-        //    return account;
-        //}
+        public User_ getUserById(SqlConnection connection, int id)
+        {
+            User_ account = null;
+            string query = "SELECT * FROM accounts WHERE id = " + id.ToString() + ";";
+            using (SqlCommand cmd = new SqlCommand(query, connection))
+            {
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int id_ = Convert.ToInt32(reader["id"]);
+                        string firstName = Convert.ToString(reader["fname"]);
+                        string lastName = Convert.ToString(reader["sname"]);
+                        string phoneNumber = Convert.ToString(reader["number_of_telephone"]);
+                        string email = Convert.ToString(reader["email"]);
+                        string password = Convert.ToString(reader["password"]);
+                        int roleId = Convert.ToInt32(reader["role_id"]);
+                        account = new User_(id_, firstName, lastName, phoneNumber, email, password, roleId);
+                    }
+                }
+            }
+            return account;
+        }
 
         public void updateUserFirstName(SqlConnection connection, int id, string newName)
         {

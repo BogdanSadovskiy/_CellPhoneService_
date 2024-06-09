@@ -18,6 +18,7 @@
         public void InitializeNextPage(Page page)
         {
             page.InitializePage();
+            currentPage.DeinitializePage();
             page.priviesPage = currentPage;
             currentPage = page;
             back.Visible = true;

@@ -1,4 +1,5 @@
 ﻿using _CellPhoneService_.view.Navigation;
+using _CellPhoneService_.view.Service;
 
 namespace _CellPhoneService_.view.Menu
 {
@@ -28,7 +29,7 @@ namespace _CellPhoneService_.view.Menu
         public void InitializeElements()
         {
             this.priviesPage = null;
-            buttonSize = new Size(70, 20);
+            buttonSize = Sizes.mainButtonSize();
 
             SignInStartLocation = new Point(myForm.Width / 2 - buttonSize.Width / 2, myForm.Height / 2 - 40);
             SignInEndLocation = new Point(SignInStartLocation.X, SignInStartLocation.Y + myForm.Height / 4 + 20);
@@ -62,13 +63,13 @@ namespace _CellPhoneService_.view.Menu
 
         private void SignUp_Click(object? sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            this.navigationManager.InitializeNextPage(new SignUpProcess(myForm, navigationManager));    
         }
 
 
         private void SignIn_Click(object? sender, EventArgs e)
         {
-            DeinitializePage();
+           
             this.navigationManager.InitializeNextPage(new SignInProcess(myForm, this, navigationManager));
         }
 

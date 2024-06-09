@@ -9,7 +9,7 @@ namespace _CellPhoneService_.Controller
         USER
     }
 
-    public static class RoleHelper
+    public  class RoleHelper
     {
         public static RoleStatus GetRole(string role)
         {

@@ -83,7 +83,7 @@ namespace _CellPhoneService_.view.Menu
 
         public override void InitializePage()
         {
-            throw new NotImplementedException();
+            Initialize();
         }
         private bool isLoginOk(string login)
         {

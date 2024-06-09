@@ -1,7 +1,9 @@
 ﻿using _CellPhoneService_.Controller;
 using _CellPhoneService_.Entity;
+using _CellPhoneService_.view.Manager;
 using _CellPhoneService_.view.Navigation;
 using _CellPhoneService_.view.Service;
+using System.Reflection.Metadata.Ecma335;
 
 namespace _CellPhoneService_.view.Menu
 {
@@ -38,8 +40,8 @@ namespace _CellPhoneService_.view.Menu
             initialLoginText = "Input Email";
             initialPasswordText = "Input Password";
 
-            buttonSize = new Size(70, 20);
-            textboxSize = new Size(200, 30);
+            buttonSize = Sizes.mainButtonSize();
+            textboxSize = Sizes.textBoxSize();
 
             login = new TextBox();
             login.Location = new Point(myForm.Width / 2 - textboxSize.Width / 2, myForm.Height / 2 - 60);
@@ -75,11 +77,14 @@ namespace _CellPhoneService_.view.Menu
 
         public override void DeinitializePage()
         {
+
             loginInstance.DeinitializeSignIn();
             passwordInstance.deinitializeSignin();
             myForm.Controls.Remove(login);
             myForm.Controls.Remove(password);
             myForm.Controls.Remove(SignIn);
+
+            myForm.Controls.Remove(label);
         }
 
         private void SignIn_Click(object? sender, EventArgs e)
@@ -92,9 +97,25 @@ namespace _CellPhoneService_.view.Menu
                 label.Text = user.getMessageStr();
                 return;
             }
-            label.Text = user.obj.FirstName;
-        }
+            start(user.obj);   
 
+        }
+        private void start(User_ user)
+        {
+            Page page;
+            bool isAdmin = checkAdmin(user);
+            if (isAdmin)
+                page = new ManagerPage();
+            else 
+                page = new UserPage(myForm, user);
+            navigationManager.InitializeNextPage(page);
+        }
+        private bool checkAdmin(User_ user)
+        {
+            RoleController roleController = new RoleController();
+            Instance<RoleStatus> instance = roleController.getRole(user.Role_id);
+            return instance.obj == RoleStatus.MANAGER ; 
+        } 
         public override void InitializePage()
         {
             InitializeElements();

@@ -67,7 +67,7 @@ namespace _CellPhoneService_.Model.Services
                 userInstance.setMessageError(Errors.ClientError);
                 userInstance.setMessageStr("Login or Password are uncorrect");
             }
-            else if (userInstance.obj.Password == password)
+            if (userInstance.obj != null && userInstance.obj.Password == password)
                 userInstance.setMessageStr(success);
 
             return userInstance;
@@ -94,24 +94,24 @@ namespace _CellPhoneService_.Model.Services
             }
             return new Messages( $"Successfuly created account {id}");
         }
-        //public User getAccountById(int id)
-        //{
-        //    User account = null;
-        //    using (SqlConnection connection = new SqlConnection(connectionString))
-        //    {
-        //        try
-        //        {
-        //            connection.Open();
-        //            account = repository.getAccountById(connection, id);
-        //        }
+        public User_ getUserById(int id)
+        {
+            User_ account = null;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    account = repository.getUserById(connection, id);
+                }
 
-        //        catch (Exception ex)
-        //        {
-        //            Console.WriteLine(ex.Message);
-        //        }
-        //        return account;
-        //    }
-        //}
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                return account;
+            }
+        }
         public Messages updateUserPassword (int id, string newPassword)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
